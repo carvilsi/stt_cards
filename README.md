@@ -3,7 +3,7 @@
 Stt_cards pretende facilitar, mediante el dictado, la tarea de pasar datos escritos a mano distribuidos en campos a formato digital. Por ejemplo fichas de clientes en los que tenemos campos que se repiten: nombre, apellidos, localidad, provincia, etc. 
 
 Stt_cards usa "HTML5 Speech Recognition API". Hasta la fecha me parece que el único explorador web que lo soporta es [Chrome](//www.google.com/chrome)
-
+En dispositivos móviles con Chrome también funciona.
 
 <h2>Instalación:</h2>
 Copia en tu servidor web index.html

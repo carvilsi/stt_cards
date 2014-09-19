@@ -240,7 +240,9 @@ THE SOFTWARE.
             $('#empezar').css('display','inline');
             $('#getCampos').css('display','none');
         }
-        console.log(camp);
+//        console.log(camp);
+        $('#texto').css('display','none');
+        
     }
       
     
@@ -250,18 +252,21 @@ THE SOFTWARE.
 
 <div data-role="page" id="home" data-cache="false">
     <div id="cosas">
-        <h2>FICHAS POC</h2> 
-
-        <h3>Escribe el nombre de los campos a rellenar. Cada uno de ellos en una línea nueva. Se admiten hasta dos palabras por campo.</h3>
+        
+        <h2 style="text-align:center">stt_cards</h2> 
+        <div id="texto">
+            <h3>Escribe el nombre de los campos a rellenar. Cada uno de ellos en una línea nueva. Se admiten hasta dos palabras por campo.</h3>
+        
+            <div id="input">
+                <label for="campos">Campos a rellenar:</label>
+                <textarea cols="40" rows="18" name="campos" id="campos"></textarea>
+            </div>            
+        </div>
 
         <div style="text-align:center">
             <p id="escuchando" style="display:none"> Escuchando </p>
         </div>
-        <div id="input">
-            <label for="campos">Campos a rellenar:</label>
-            <textarea cols="40" rows="18" name="campos" id="campos"></textarea>
-        </div>
-
+        
         <div id="otro" style="margin-left:10px">
         </div>
     
