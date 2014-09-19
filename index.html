@@ -33,8 +33,12 @@ THE SOFTWARE.
 
 <script language="javascript" type="text/javascript">  
    
+    /**
+    Como siempre algunas variables útiles
+    */
+    
     var recognition;
-    var camp;
+    var camp = [];
     var numeroFichas = 0;
     var sepCSV = ";";
     var enter = '\n';
@@ -80,6 +84,10 @@ THE SOFTWARE.
             $('#empezar').css('display','inline');  
        }
     
+    /**
+    ejecutamos al iniciar
+    */
+    
     function init() {
         muestraOculta(false);
         $('#parar').css('display','none');
@@ -89,8 +97,7 @@ THE SOFTWARE.
     /**
     para empezar con la cosa de las transcripción
     */
-    
-    
+     
     function grabar() {
         if (!('webkitSpeechRecognition' in window)) {
             noVaLaCosa();
@@ -116,17 +123,21 @@ THE SOFTWARE.
                         transcript = transcript.trim();       
                         var transArray = transcript.split(" ");
                         if (transArray.length > 1) {
+//                            console.log(transcript);
                             var tmparry = transArray.slice(0,2);
+//                            console.log(camp);
                             var find = $.inArray(tmparry.join(" "),camp);
                             if (find != -1) {
                                 $("input[name='" + camp[find] +"']").focus();
                                 var t = transArray.slice(2,transArray.length);
+//                                console.log(t);
                                 $("input[name='" + camp[find] +"']").val(t.join(" "));
                             } else {
                                 find = $.inArray(transArray[0],camp);
                                 if (find != -1) {
                                     $('#' + camp[find]).focus();
                                     var t = transArray.slice(1,transArray.length);
+//                                    console.log(t);
                                     $('#' + camp[find]).val(t.join(" "));
                                 } else {
                                     console.log('nada :/');
@@ -150,11 +161,14 @@ THE SOFTWARE.
             }
             
             recognition.onstop = function () {
-                
+                $('#escuchando').css('display','none');
             }
         } 
     }
     
+    /**
+    Para cuando paramos el dictado
+    */
     
         function stopstt() {
             recognition.stop(); 
@@ -164,6 +178,10 @@ THE SOFTWARE.
             $('#escuchando').css('display','none');
         }
     
+    /**
+    Cuando empezamos el dictado
+    */
+    
     
         function startstt() {
             muestraOculta(false);
@@ -172,12 +190,25 @@ THE SOFTWARE.
             });
             grabar();
         }
+    
+    /**
+    El explorador web no soporta el dictado, y aunque dugan ortas cosas, por ahí, solo lo soporta Google Chrome
+    Mostramos un aviso al usuario 
+    
+    TODO: meter una comprobación al principio para evitar mal entendidos :P
+    */
+    
         
         function noVaLaCosa() {
             $('#nova').css('display','inline');
             $('#stop').css('display','none');        
             $('#start').css('display','none');        
         }
+    
+    
+    /**
+    mostar u ocultar algunos botones "a pajera abierta"
+    */
         
         function muestraOculta (bool) {
             if (bool) {
@@ -189,19 +220,30 @@ THE SOFTWARE.
             }
         }
     
+    /**
+    Tomar los campos del cuadro de texto y crear los input
+    */
+    
     function getCampos() {
         var campos = $('#campos').val();
         if (campos) {
-            camp = campos.split("\n");
-            camp.forEach(function(campo){
-                $('#otro').append('<div style="width:98%" class="ui-field-contain"><label for="' + campo + '">' + campo + ':' + '</label><input data-clear-btn="true"  name="' + campo + '" id="' + campo + '" placeholder="" value="" type="text"></div>');
-            });
-        $('#otro').trigger("create");
+            var ctmp = campos.split("\n");
+            ctmp.forEach(function(campo){
+                var c = campo.trim();
+//                .replace(/\s+/g, ' ');
+                if (c) {
+                    camp.push(c);
+                    $('#otro').append('<div style="width:98%" class="ui-field-contain"><label for="' + c + '">' + c + ':' + '</label><input data-clear-btn="true"  name="' + c + '" id="' + c + '" placeholder="" value="" type="text"></div>');
+                    }
+                });
+            $('#otro').trigger("create");
             $('#empezar').css('display','inline');
             $('#getCampos').css('display','none');
         }
+        console.log(camp);
     }
-       
+      
+    
     
     window.addEventListener("load", init, false);  
 </script>  
@@ -220,7 +262,7 @@ THE SOFTWARE.
             <textarea cols="40" rows="18" name="campos" id="campos"></textarea>
         </div>
 
-        <div id="otro">
+        <div id="otro" style="margin-left:10px">
         </div>
     
         <br/>
@@ -228,15 +270,12 @@ THE SOFTWARE.
         <div style="text-align:center">
             <a id="empezar" href="#" onclick="startstt();" class="ui-shadow ui-btn ui-corner-all ui-btn-inline ui-btn-icon-left ui-icon-comment">Empezar</a>
             <a id="parar" href="#" onclick="stopstt();" class="ui-shadow ui-btn ui-corner-all ui-btn-inline ui-btn-icon-left ui-icon-delete">Parar</a>
-            <a id="getCampos" href="#" onclick="getCampos();" class="ui-shadow ui-btn ui-corner-all ui-btn-inline ui-btn-icon-left ui-icon-delete">Coge los Campos</a>
+            <a id="getCampos" href="#" onclick="getCampos();" class="ui-shadow ui-btn ui-corner-all ui-btn-inline ui-btn-icon-left ui-icon-arrow-d">Crear Campos</a>
         </div>
 
         <p id="nova" style="display:none">Web Speech API no rula en este explorador web. Usa mejor <a href=
             "//www.google.com/chrome">Chrome</a> versión 25 o superior.
           </p>
-
-        <div id="contenido">
-        </div>
         
         <br/>
 

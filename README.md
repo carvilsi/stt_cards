@@ -12,7 +12,7 @@ Copia en tu servidor web index.html
 <h2>Uso:</h2>
 
 * Escribe en recuadro de texto los campos que quieres rellenar. Cada uno de ellos en una línea. Los campos pueden estar formados como máximo por dos palabras.
-* Coge los campos
+* Crea los Campos
 * Empieza. El explorador te pedirá permisos para activar el micro. El dictado debe de empezar por el nombre del campo en el que se quiere escribir y sin pausa (de manera fluida) se deben de decir los datos asociados. Antes de seguir con el siguiente campo realiza una pequeña pausa (como un punto y aparte). Si vas a enumerar los campos hazlo con números, por ejemplo "dirección 1", "dirección 2", etc.
 * Para.
 * Datos Ok. Sólo si están correctos, puedes modificar la transcripción antes de realizar esta acción. Los datos se guardan en el localStorage del navegador.
