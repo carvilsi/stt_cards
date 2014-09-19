@@ -1,0 +1,250 @@
+<!--
+The MIT License
+
+Copyright (c) 2014 Carlos Villanueva
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+-->
+
+
+<!DOCTYPE html>  <meta charset="utf-8" />
+<title>stt_cards</title>  
+
+<link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.3/jquery.mobile-1.4.3.min.css" />
+<script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+<script src="http://code.jquery.com/mobile/1.4.3/jquery.mobile-1.4.3.min.js"></script>
+
+
+<script language="javascript" type="text/javascript">  
+   
+    var recognition;
+    var camp;
+    var numeroFichas = 0;
+    var sepCSV = ";";
+    var enter = '\n';
+    
+    var longArray = [];
+    
+    /**
+    Exporta los datos introducidos a un archivo csv para descargar
+    */
+    
+    function exportarDatos() {
+        
+        var csv = camp.join(";") + enter;
+        console.log(localStorage.length);
+        for (var i=0; i<localStorage.length; i++) {
+            csv = csv + localStorage.getItem(i);
+        }
+        var blob = new Blob([csv], {type: "text/csv"});
+        var url = URL.createObjectURL(blob);
+        var a = document.querySelector("#csvDownload"); // id of the <a> element to render the download link
+        a.href = url;
+        var date = new Date();
+        a.download = 'tuFicha_' + date + '.csv';  
+        localStorage.clear();
+    }
+    
+    /**
+    Mete los datos en el localStorage
+    */
+    
+    function datosOk() {
+            var datos = "";
+            camp.forEach(function (campo, index){
+                datos += $("input[name='" + campo +"']").val() + sepCSV;
+            });
+            datos += enter;
+            localStorage.setItem(numeroFichas,datos);
+            numeroFichas += 1;
+            muestraOculta(false);
+            if ( numeroFichas >= 1) {
+              $('#csvDownload').css('display','inline');  
+            }
+            $('#empezar').css('display','inline');  
+       }
+    
+    function init() {
+        muestraOculta(false);
+        $('#parar').css('display','none');
+        $('#empezar').css('display','none');
+    }
+    
+    /**
+    para empezar con la cosa de las transcripción
+    */
+    
+    
+    function grabar() {
+        if (!('webkitSpeechRecognition' in window)) {
+            noVaLaCosa();
+        } else {
+            $('#parar').css('display','inline');
+            $('#empezar').css('display','none');
+            var out = $('#textarea');
+            recognition = new webkitSpeechRecognition();
+            recognition.lang = "es-ES";
+            recognition.continuous = true;
+            var final_transcript = '';
+            var match;
+            recognition.onresult = function(event) {
+                var interim_transcript = '';
+                if (typeof(event.results) == 'undefined') {
+                    recognition.onend = null;
+                    recognition.stop();
+                    return;
+                }
+                for (var i = event.resultIndex; i < event.results.length; ++i) {
+                    if (event.results[i].isFinal) {
+                        var transcript = event.results[event.resultIndex][0].transcript;
+                        transcript = transcript.trim();       
+                        var transArray = transcript.split(" ");
+                        if (transArray.length > 1) {
+                            var tmparry = transArray.slice(0,2);
+                            var find = $.inArray(tmparry.join(" "),camp);
+                            if (find != -1) {
+                                $("input[name='" + camp[find] +"']").focus();
+                                var t = transArray.slice(2,transArray.length);
+                                $("input[name='" + camp[find] +"']").val(t.join(" "));
+                            } else {
+                                find = $.inArray(transArray[0],camp);
+                                if (find != -1) {
+                                    $('#' + camp[find]).focus();
+                                    var t = transArray.slice(1,transArray.length);
+                                    $('#' + camp[find]).val(t.join(" "));
+                                } else {
+                                    console.log('nada :/');
+                                }
+                            }    
+                        } else {
+                            console.log('nada :/');
+                        }
+                    }
+                }
+            };
+            
+            // Empezamos con la cosa del escuchar para transcribir
+            
+            recognition.start();
+            
+            // Manejar esa clase de cosas relacionadas con la transcripción
+            
+            recognition.onstart = function () {
+                $('#escuchando').css('display','inline');
+            }
+            
+            recognition.onstop = function () {
+                
+            }
+        } 
+    }
+    
+    
+        function stopstt() {
+            recognition.stop(); 
+            $('#parar').css('display','none');
+            $('#empezar').css('display','none');
+            $('#datosOk').css('display','inline');
+            $('#escuchando').css('display','none');
+        }
+    
+    
+        function startstt() {
+            muestraOculta(false);
+            camp.forEach(function (campo, index){
+                    $("input[name='" + campo +"']").val('');
+            });
+            grabar();
+        }
+        
+        function noVaLaCosa() {
+            $('#nova').css('display','inline');
+            $('#stop').css('display','none');        
+            $('#start').css('display','none');        
+        }
+        
+        function muestraOculta (bool) {
+            if (bool) {
+                $('#datosOk').css('display','inline');
+                $('#csvDownload').css('display','inline');
+            } else {
+                $('#datosOk').css('display','none');
+                $('#csvDownload').css('display','none');
+            }
+        }
+    
+    function getCampos() {
+        var campos = $('#campos').val();
+        if (campos) {
+            camp = campos.split("\n");
+            camp.forEach(function(campo){
+                $('#otro').append('<div style="width:98%" class="ui-field-contain"><label for="' + campo + '">' + campo + ':' + '</label><input data-clear-btn="true"  name="' + campo + '" id="' + campo + '" placeholder="" value="" type="text"></div>');
+            });
+        $('#otro').trigger("create");
+            $('#empezar').css('display','inline');
+            $('#getCampos').css('display','none');
+        }
+    }
+       
+    
+    window.addEventListener("load", init, false);  
+</script>  
+
+<div data-role="page" id="home" data-cache="false">
+    <div id="cosas">
+        <h2>FICHAS POC</h2> 
+
+        <h3>Escribe el nombre de los campos a rellenar. Cada uno de ellos en una línea nueva. Se admiten hasta dos palabras por campo.</h3>
+
+        <div style="text-align:center">
+            <p id="escuchando" style="display:none"> Escuchando </p>
+        </div>
+        <div id="input">
+            <label for="campos">Campos a rellenar:</label>
+            <textarea cols="40" rows="18" name="campos" id="campos"></textarea>
+        </div>
+
+        <div id="otro">
+        </div>
+    
+        <br/>
+
+        <div style="text-align:center">
+            <a id="empezar" href="#" onclick="startstt();" class="ui-shadow ui-btn ui-corner-all ui-btn-inline ui-btn-icon-left ui-icon-comment">Empezar</a>
+            <a id="parar" href="#" onclick="stopstt();" class="ui-shadow ui-btn ui-corner-all ui-btn-inline ui-btn-icon-left ui-icon-delete">Parar</a>
+            <a id="getCampos" href="#" onclick="getCampos();" class="ui-shadow ui-btn ui-corner-all ui-btn-inline ui-btn-icon-left ui-icon-delete">Coge los Campos</a>
+        </div>
+
+        <p id="nova" style="display:none">Web Speech API no rula en este explorador web. Usa mejor <a href=
+            "//www.google.com/chrome">Chrome</a> versión 25 o superior.
+          </p>
+
+        <div id="contenido">
+        </div>
+        
+        <br/>
+
+        <br/>
+        
+        <div style="text-align:center">
+            <a id="datosOk" href="#" onclick="datosOk();" class="ui-shadow ui-btn ui-corner-all ui-btn-inline ui-btn-icon-left ui-icon-check">Datos OK</a>
+            <a id="csvDownload" href="#" onclick="exportarDatos();" class="ui-shadow ui-btn ui-corner-all ui-btn-inline ui-btn-icon-left ui-icon-action">Exportar Datos</a>
+        </div>
+    </div>
+</div>
