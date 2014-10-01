@@ -6,8 +6,10 @@ Stt_cards usa "HTML5 Speech Recognition API". Hasta la fecha me parece que el ú
 En dispositivos móviles con Chrome también funciona.
 
 <h2>Instalación:</h2>
-Copia en tu servidor web index.html
 
+Clona stt_cards en tu servidor web:
+
+`$ git clone https://github.com/carvilsi/stt_cards.git`
 
 <h2>Uso:</h2>
 
