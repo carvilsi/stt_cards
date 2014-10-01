@@ -6,6 +6,13 @@
 <script src="http://code.jquery.com/mobile/1.4.3/jquery.mobile-1.4.3.min.js"></script>
 <script src="js/stt_cards.js"></script>
 
+<script type="application/javascript">
+
+
+
+</script>
+
+
 <div data-role="page" id="home" data-cache="false">
     <div id="cosas">
         
@@ -29,11 +36,12 @@
         <br/>
 
         <div style="text-align:center">
-            <a id="empezar" href="#" onclick="startstt();" class="ui-shadow ui-btn ui-corner-all ui-btn-inline ui-btn-icon-left ui-icon-comment">Empezar</a>
-            <a id="parar" href="#" onclick="stopstt();" class="ui-shadow ui-btn ui-corner-all ui-btn-inline ui-btn-icon-left ui-icon-delete">Parar</a>
-            <a id="getCampos" href="#" onclick="getCampos();" class="ui-shadow ui-btn ui-corner-all ui-btn-inline ui-btn-icon-left ui-icon-arrow-d">Crear Campos</a>
+            <a id="empezar" href="#" onclick="Stt_cards.startstt();" class="ui-shadow ui-btn ui-corner-all ui-btn-inline ui-btn-icon-left ui-icon-comment">Empezar</a>
+            <a id="parar" href="#" onclick="Stt_cards.stopstt();" class="ui-shadow ui-btn ui-corner-all ui-btn-inline ui-btn-icon-left ui-icon-delete">Parar</a>
+            <a id="getCampos" href="#" onclick="Stt_cards.getCampos();" class="ui-shadow ui-btn ui-corner-all ui-btn-inline ui-btn-icon-left ui-icon-arrow-d">Crear Campos</a>
         </div>
-
+        <br/>
+        <br/>
         <p id="nova" style="display:none">Web Speech API no rula en este explorador web. Usa mejor <a href=
             "//www.google.com/chrome">Chrome</a> versión 25 o superior.
           </p>
@@ -43,8 +51,8 @@
         <br/>
         
         <div style="text-align:center">
-            <a id="datosOk" href="#" onclick="datosOk();" class="ui-shadow ui-btn ui-corner-all ui-btn-inline ui-btn-icon-left ui-icon-check">Datos OK</a>
-            <a id="csvDownload" href="#" onclick="exportarDatos();" class="ui-shadow ui-btn ui-corner-all ui-btn-inline ui-btn-icon-left ui-icon-action">Exportar Datos</a>
+            <a id="datosOk" href="#" onclick="Stt_cards.datosOk();" class="ui-shadow ui-btn ui-corner-all ui-btn-inline ui-btn-icon-left ui-icon-check">Datos OK</a>
+            <a id="csvDownload" href="#" onclick="Stt_cards.exportarDatos();" class="ui-shadow ui-btn ui-corner-all ui-btn-inline ui-btn-icon-left ui-icon-action">Exportar Datos</a>
         </div>
     </div>
 </div>
