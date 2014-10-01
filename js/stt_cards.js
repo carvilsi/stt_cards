@@ -229,7 +229,9 @@ var Stt_cards = {
                 var c = campo.trim();
                 if (c) {
                     Stt_cards.camp.push(c);
-                    $('#otro').append('<div style="width:98%" class="ui-field-contain"><label for="' + c + '">' + c + ':' + '</label><input data-clear-btn="true"  name="' + c + '" id="' + c + '" placeholder="" value="" type="text"></div>');
+                    $('#otro').append('<div style="width:98%" class="ui-field-contain"><label for="' + c +
+                     '">' + c + ':' + '</label><input data-clear-btn="false"  name="' + c + '" id="' + c +
+                      '" placeholder="" value="" type="text"></div>');
                     }
                 });
             $('#otro').trigger("create");
