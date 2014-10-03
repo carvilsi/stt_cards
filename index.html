@@ -1,58 +1,117 @@
-<!DOCTYPE html>  <meta charset="utf-8" />
-<title>stt_cards</title>  
+<!DOCTYPE html>
+<meta charset="utf-8" />
+<title>stt_cards</title>
 
 <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.3/jquery.mobile-1.4.3.min.css" />
 <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
 <script src="http://code.jquery.com/mobile/1.4.3/jquery.mobile-1.4.3.min.js"></script>
 <script src="js/stt_cards.js"></script>
 
-<script type="application/javascript">
+<script type="text/javascript">
+   
+    /**
+    ejecutamos al iniciar
+    */
+
+    function init() {
+        setTimeout(function () {
+            $('#parar').css('display', 'none');
+            $('#empezar').css('display', 'none');
+            $('#datosOk').css('display', 'none');
+            $('#csvBajar').css('display', 'none');
+            $('#escuchando').css('display', 'none');
+        }, 100);
+        Stt_cards.init('#campos', '#otro');
+    }
 
 
+    init();
 
+
+    /**
+    inicializamos la cosa para que tenga elementos de donde tomar los campos y 
+    donde poner los input creados
+    */
+
+
+    function tomarCampos() {
+        if (Stt_cards.getCampos()) {
+            $('#empezar').css('display', 'inline');
+            $('#tomarCampos').css('display', 'none');
+            $('#texto').css('display', 'none');
+        } else {
+            return;
+        }
+    }
+
+    function empieza() {
+        Stt_cards.startstt();
+        if (Stt_cards.recognition) {
+            Stt_cards.recognition.onstart = function () {
+                $('#empezar').css('display', 'none');
+                $('#parar').css('display', 'inline');
+            }
+        }
+    }
+
+    function para() {
+        Stt_cards.stopstt();
+        if (!Stt_cards.listen) {
+            $('#parar').css('display', 'none');
+            $('#datosOk').css('display', 'inline');
+            $('#csvBajar').css('display', 'none');
+        }
+    }
+
+    function tomarDatos() {
+        if (Stt_cards.datosOk()) {
+            $('#empezar').css('display', 'inline');
+            $('#datosOk').css('display', 'none');
+            if (Stt_cards.numeroFichas > 0) {
+                $('#csvBajar').css('display', 'inline');
+            }
+        } else {
+            return;
+        }
+    }
 </script>
 
 
 <div data-role="page" id="home" data-cache="false">
     <div id="cosas">
-        
+
         <h2 style="text-align:center">stt_cards</h2> 
         <div id="texto">
             <h3>Escribe el nombre de los campos a rellenar. Cada uno de ellos en una línea nueva. Se admiten hasta dos palabras por campo.</h3>
-        
+
             <div id="input">
                 <label for="campos">Campos a rellenar:</label>
                 <textarea cols="40" rows="18" name="campos" id="campos"></textarea>
-            </div>            
+            </div>
         </div>
 
         <div style="text-align:center">
-            <p id="escuchando" style="display:none"> Escuchando </p>
+            <p id="escuchando" style="display:none">Escuchando</p>
         </div>
-        
+
         <div id="otro" style="margin-left:10px">
         </div>
-    
+
         <br/>
 
         <div style="text-align:center">
-            <a id="empezar" href="#" onclick="Stt_cards.startstt();" class="ui-shadow ui-btn ui-corner-all ui-btn-inline ui-btn-icon-left ui-icon-comment">Empezar</a>
-            <a id="parar" href="#" onclick="Stt_cards.stopstt();" class="ui-shadow ui-btn ui-corner-all ui-btn-inline ui-btn-icon-left ui-icon-delete">Parar</a>
-            <a id="getCampos" href="#" onclick="Stt_cards.getCampos();" class="ui-shadow ui-btn ui-corner-all ui-btn-inline ui-btn-icon-left ui-icon-arrow-d">Crear Campos</a>
+            <a id="empezar" href="#" onclick="empieza();" class="ui-shadow ui-btn ui-corner-all ui-btn-inline ui-btn-icon-left ui-icon-comment">Empezar</a>
+            <a id="parar" href="#" onclick="para();" class="ui-shadow ui-btn ui-corner-all ui-btn-inline ui-btn-icon-left ui-icon-delete">Parar</a>
+            <a id="tomarCampos" href="#" onclick="tomarCampos();" class="ui-shadow ui-btn ui-corner-all ui-btn-inline ui-btn-icon-left ui-icon-arrow-d">Crear Campos</a>
         </div>
-        <br/>
-        <br/>
-        <p id="nova" style="display:none">Web Speech API no rula en este explorador web. Usa mejor <a href=
-            "//www.google.com/chrome">Chrome</a> versión 25 o superior.
-          </p>
-        
+
         <br/>
 
         <br/>
-        
+
         <div style="text-align:center">
-            <a id="datosOk" href="#" onclick="Stt_cards.datosOk();" class="ui-shadow ui-btn ui-corner-all ui-btn-inline ui-btn-icon-left ui-icon-check">Datos OK</a>
-            <a id="csvDownload" href="#" onclick="Stt_cards.exportarDatos();" class="ui-shadow ui-btn ui-corner-all ui-btn-inline ui-btn-icon-left ui-icon-action">Exportar Datos</a>
+            <a id="datosOk" href="#" onclick="tomarDatos();" class="ui-shadow ui-btn ui-corner-all ui-btn-inline ui-btn-icon-left ui-icon-check">Datos OK</a>
+            <a id="csvBajar" href="#" onclick="Stt_cards.exportarDatos('#csvBajar');" class="ui-shadow ui-btn ui-corner-all ui-btn-inline ui-btn-icon-left ui-icon-action">Exportar Datos</a>
         </div>
     </div>
 </div>
