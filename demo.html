@@ -2,9 +2,9 @@
 <meta charset="utf-8" />
 <title>stt_cards</title>
 
-<link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.3/jquery.mobile-1.4.3.min.css" />
-<script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
-<script src="http://code.jquery.com/mobile/1.4.3/jquery.mobile-1.4.3.min.js"></script>
+<!--<link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.3/jquery.mobile-1.4.3.min.css" />-->
+<!--<script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>-->
+<!--<script src="http://code.jquery.com/mobile/1.4.3/jquery.mobile-1.4.3.min.js"></script>-->
 <script src="js/stt_cards.js"></script>
 
 <script type="text/javascript">
@@ -15,11 +15,17 @@
 
     function init() {
         setTimeout(function () {
-            $('#parar').css('display', 'none');
-            $('#empezar').css('display', 'none');
-            $('#datosOk').css('display', 'none');
-            $('#csvBajar').css('display', 'none');
-            $('#escuchando').css('display', 'none');
+//            var argggg = document.getElementById('parar');
+//            console.log(argggg);
+            document.getElementById('parar').style.display = "none";
+            document.getElementById('empezar').style.display = "none";
+            document.getElementById('datosOk').style.display = "none";
+            document.getElementById('csvBajar').style.display = "none";
+//            document.getElementById('escuc').style.display = "none";
+//            document.getElementById('empezar').style.display = "none";
+//            document.getElementById('datosOk').style.display = "none";
+//            document.getElementById('csvBajar').style.display = "none";
+//            document.getElementById('escuchando').style.display = "none";
         }, 100);
         Stt_cards.init('campos', 'otro');
     }
@@ -36,9 +42,9 @@
 
     function tomarCampos() {
         if (Stt_cards.getCampos()) {
-            $('#empezar').css('display', 'inline');
-            $('#tomarCampos').css('display', 'none');
-            $('#texto').css('display', 'none');
+            document.getElementById('empezar').style.display = "inline";
+            document.getElementById('tomarCampos').style.display = "none";
+            document.getElementById('texto').style.display = "none";
         } else {
             return;
         }
@@ -48,8 +54,8 @@
         Stt_cards.startstt();
         if (Stt_cards.recognition) {
             Stt_cards.recognition.onstart = function () {
-                $('#empezar').css('display', 'none');
-                $('#parar').css('display', 'inline');
+                document.getElementById('empezar').style.display = "none";
+                document.getElementById('parar').style.display = "inline";
             }
         }
     }
@@ -57,18 +63,18 @@
     function para() {
         Stt_cards.stopstt();
         if (!Stt_cards.listen) {
-            $('#parar').css('display', 'none');
-            $('#datosOk').css('display', 'inline');
-            $('#csvBajar').css('display', 'none');
+            document.getElementById('parar').style.display = "none";
+            document.getElementById('datosOk').style.display = "inline";
+            document.getElementById('csvBajar').style.display = "none";
         }
     }
 
     function tomarDatos() {
         if (Stt_cards.datosOk()) {
-            $('#empezar').css('display', 'inline');
-            $('#datosOk').css('display', 'none');
+            document.getElementById('empezar').style.display = "inline";
+            document.getElementById('datosOk').style.display = "none";
             if (Stt_cards.numeroFichas > 0) {
-                $('#csvBajar').css('display', 'inline');
+                document.getElementById('csvBajar').style.display = "inline";
             }
         } else {
             return;

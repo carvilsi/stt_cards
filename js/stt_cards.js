@@ -72,28 +72,28 @@ var Stt_cards = {
             type: "text/csv"
         });
         var url = URL.createObjectURL(blob);
-        var a = document.querySelector(button);
+        var a = document.getElementById(button);
         a.href = url;
         var date = new Date();
         a.download = 'tuFicha_' + date + '.csv';
         localStorage.clear();
     },
     /**
-    @TODO: Mete los datos en el localStorage
+        Mete los datos en el localStorage
     */
 
     datosOk: function () {
         try {
             var datos = "";
             Stt_cards.camp.forEach(function (campo, index) {
-                datos += $("input[name='" + campo + "']").val();
+                datos += document.querySelector('[name="' + campo + '"]').value;
             });
             if (!datos) {
                 return;
             }
             datos = "";
             Stt_cards.camp.forEach(function (campo, index) {
-                datos += $("input[name='" + campo + "']").val() + Stt_cards.sepCSV;
+                datos += document.querySelector('[name="' + campo + '"]').value + Stt_cards.sepCSV;
             });
             datos += Stt_cards.enter;
             localStorage.setItem(this.numeroFichas, datos);
@@ -110,7 +110,7 @@ var Stt_cards = {
 
     grabar: function () {
         if (!('webkitSpeechRecognition' in window)) {
-            this.noVaLaCosa(); // TODO: será necesario injectarlo en el DOM
+            this.noVaLaCosa();
         } else {
             this.recognition = new webkitSpeechRecognition();
             this.recognition.lang = "es-ES"; // seto molaría que fuera opcional
@@ -131,17 +131,17 @@ var Stt_cards = {
                         var transArray = transcript.split(" ");
                         if (transArray.length > 1) {
                             var tmparry = transArray.slice(0, 2);
-                            var find = $.inArray(tmparry.join(" "), Stt_cards.camp);
+                            var find = Stt_cards.camp.indexOf(tmparry.join(" "));
                             if (find != -1) {
-                                $("input[name='" + this.camp[find] + "']").focus();
+                                document.querySelector('[name="' + Stt_cards.camp[find] + '"]').focus();
                                 var t = transArray.slice(2, transArray.length);
-                                $("input[name='" + this.camp[find] + "']").val(t.join(" "));
+                                document.querySelector('[name="' + Stt_cards.camp[find] + '"]').value = t.join(" ");
                             } else {
-                                find = $.inArray(transArray[0], Stt_cards.camp);
+                                find = Stt_cards.camp.indexOf(transArray[0]);
                                 if (find != -1) {
-                                    $('#' + Stt_cards.camp[find]).focus();
+                                    document.querySelector('[name="' + Stt_cards.camp[find] + '"]').focus();
                                     var t = transArray.slice(1, transArray.length);
-                                    $('#' + Stt_cards.camp[find]).val(t.join(" "));
+                                    document.querySelector('[name="' + Stt_cards.camp[find] + '"]').value = t.join(" ");
                                 } else {
                                     console.log('nada :/');
                                 }
@@ -185,7 +185,7 @@ var Stt_cards = {
 
     startstt: function () {
         this.camp.forEach(function (campo, index) {
-            $("input[name='" + campo + "']").val('');
+            document.querySelector('[name="' + campo + '"]').value = '';
         });
         this.grabar();
     },
@@ -200,7 +200,7 @@ var Stt_cards = {
 
     noVaLaCosa: function () {
         if (Stt_cards.divOut) {
-            $(Stt_cards.divOut).append('<br/><br/><p id="nova" style="display:none">Web Speech API no rula en este explorador web. Usa mejor <a href="//www.google.com/chrome">Chrome</a> versión 25 o superior.</p>');
+            document.getElementById(Stt_cards.divOut).innerHTML('<br/><br/><p id="nova" style="display:none">Web Speech API no rula en este explorador web. Usa mejor <a href="//www.google.com/chrome">Chrome</a> versión 25 o superior.</p>');
         } else {
             return;
         }
@@ -213,19 +213,19 @@ var Stt_cards = {
 
     getCampos: function () {
         if (Stt_cards.elemIn && Stt_cards.divOut) {
-            var campos = $(Stt_cards.elemIn).val();
+            console.warn(Stt_cards.divOut);
+            var campos = document.getElementById(Stt_cards.elemIn).value;
             if (campos) {
                 var ctmp = campos.split("\n");
+                var htmlCode = '';
                 ctmp.forEach(function (campo, index) {
                     var c = campo.trim();
                     if (c) {
                         Stt_cards.camp.push(c);
-                        $(Stt_cards.divOut).append('<div style="width:98%" class="ui-field-contain"><label for="' + c +
-                            '">' + c + ':' + '</label><input data-clear-btn="false"  name="' + c + '" id="' + c +
-                            '" placeholder="" value="" type="text"></div>');
+                        htmlCode += '<div style="width:98%" class="ui-field-contain"><label for="' + c + '">' + c + ':' + '</label><input data-clear-btn="false"  name="' + c + '" id="' + c + '" placeholder="" value="" type="text"></div>';
                     }
                 });
-                $(Stt_cards.divOut).trigger("create");
+                document.getElementById(Stt_cards.divOut).innerHTML = htmlCode;
                 return true;
             } else {
                 return false;
