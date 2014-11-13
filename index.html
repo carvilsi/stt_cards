@@ -48,6 +48,7 @@
     function empieza() {
         Stt_cards.startstt();
         if (Stt_cards.recognition) {
+//            Comentando esta linea evitamos que sea obligatorio el uso del dictado para introducir datos 
 //            Stt_cards.recognition.onstart = function () {
                 $('#empezar').css('display', 'none');
                 $('#parar').css('display', 'inline');
