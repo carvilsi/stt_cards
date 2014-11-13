@@ -39,6 +39,7 @@
             $('#empezar').css('display', 'inline');
             $('#tomarCampos').css('display', 'none');
             $('#texto').css('display', 'none');
+            $('#otro').trigger("create");
         } else {
             return;
         }
@@ -47,10 +48,10 @@
     function empieza() {
         Stt_cards.startstt();
         if (Stt_cards.recognition) {
-            Stt_cards.recognition.onstart = function () {
+//            Stt_cards.recognition.onstart = function () {
                 $('#empezar').css('display', 'none');
                 $('#parar').css('display', 'inline');
-            }
+//            }
         }
     }
 

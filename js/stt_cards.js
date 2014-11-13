@@ -77,6 +77,7 @@ var Stt_cards = {
         var date = new Date();
         a.download = 'tuFicha_' + date + '.csv';
         localStorage.clear();
+        Stt_cards.numeroFichas = 0;
     },
     /**
         Mete los datos en el localStorage
@@ -213,7 +214,6 @@ var Stt_cards = {
 
     getCampos: function () {
         if (Stt_cards.elemIn && Stt_cards.divOut) {
-            console.warn(Stt_cards.divOut);
             var campos = document.getElementById(Stt_cards.elemIn).value;
             if (campos) {
                 var ctmp = campos.split("\n");
